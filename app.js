@@ -29,7 +29,7 @@ const DEFAULT_TRACKS = [
 ];
 
 const appConfig = window.MUSIC_SHARE_CONFIG || {
-  supabase: { url: '', anonKey: '' },
+  supabase: { url: '', anonKey: '', provider: 'google', providers: ['google', 'github'] },
   cloudinary: { cloudName: '', uploadPreset: '' },
   app: { mode: 'local-first' },
 };
@@ -103,9 +103,28 @@ function getSupabaseClient() {
   return window.supabase.createClient(url, anonKey);
 }
 
+function getConfiguredProviders() {
+  const configured = Array.isArray(appConfig.supabase?.providers)
+    ? appConfig.supabase.providers
+    : appConfig.supabase?.provider
+      ? [appConfig.supabase.provider]
+      : ['google', 'github'];
+
+  return configured.filter((provider) => ['google', 'github'].includes(provider));
+}
+
 function getConfiguredAuthProvider() {
-  const provider = appConfig.supabase?.provider || 'google';
-  return ['google', 'github'].includes(provider) ? provider : 'google';
+  const providers = getConfiguredProviders();
+  return providers.length > 0 ? providers[0] : 'google';
+}
+
+function applyAvailableAuthButtons() {
+  const providers = new Set(getConfiguredProviders());
+  const showGoogle = providers.has('google');
+  const showGithub = providers.has('github');
+
+  elements.loginGoogleBtn.classList.toggle('hidden', !showGoogle);
+  elements.loginGithubBtn.classList.toggle('hidden', !showGithub);
 }
 
 async function signInWithProvider(providerName) {
@@ -542,9 +561,12 @@ function renderMyPlaylists() {
 
 async function updateAuthUI() {
   const authenticated = !!state.user;
+  const providers = new Set(getConfiguredProviders());
+  const showGoogle = !authenticated && providers.has('google');
+  const showGithub = !authenticated && providers.has('github');
 
-  elements.loginGoogleBtn.classList.toggle('hidden', authenticated);
-  elements.loginGithubBtn.classList.toggle('hidden', authenticated);
+  elements.loginGoogleBtn.classList.toggle('hidden', !showGoogle);
+  elements.loginGithubBtn.classList.toggle('hidden', !showGithub);
   elements.logoutBtn.classList.toggle('hidden', !authenticated);
 
   if (authenticated) {
@@ -750,6 +772,7 @@ function initializeApp() {
   renderRecentMusic();
   renderFavoritePlaylists();
   renderMyPlaylists();
+  applyAvailableAuthButtons();
   updateAuthUI();
   bindEvents();
   restoreSupabaseSession();
