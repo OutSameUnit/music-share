@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Music Share - Gmailログインに対応した家族向け音楽共有アプリ" />
+    <title>Music Share</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-block">
+          <span class="eyebrow">Music Share</span>
+          <h1>家族と音楽を共有する</h1>
+        </div>
+
+        <div class="topbar-actions">
+          <div id="userBadge" class="user-badge hidden">匿名アカウント</div>
+          <button id="loginGoogleBtn" class="primary-btn" type="button">Googleでログイン</button>
+          <button id="loginGithubBtn" class="primary-btn" type="button">GitHubでログイン</button>
+          <button id="logoutBtn" class="ghost-btn hidden" type="button">ログアウト</button>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <section class="hero grid-two">
+          <div class="hero-copy">
+            <p class="mini-label">最近公開された音楽</p>
+            <h2>やさしい時間を、家族と一緒に。</h2>
+            <p class="lead">
+              お気に入りの曲や思い出を、家族だけのプレイリストとして共有できます。
+            </p>
+            <div class="hero-actions">
+              <button id="createPlaylistBtn" class="primary-btn" type="button">プレイリスト作成</button>
+              <label class="upload-btn" for="videoUploadInput">
+                <input id="videoUploadInput" type="file" accept="video/*" multiple />
+                <span>動画をアップロード</span>
+              </label>
+            </div>
+            <p id="authHint" class="auth-hint">
+              匿名ユーザーとして利用中です。ログインするとプレイリスト作成とアップロードができます。
+            </p>
+          </div>
+
+          <div class="featured-card">
+            <div class="featured-header">
+              <span>Featured</span>
+              <span id="featuredMode">匿名モード</span>
+            </div>
+            <div class="featured-art">♪</div>
+            <div class="featured-info">
+              <h3 id="featuredTitle">ここだけのプレイリスト</h3>
+              <p id="featuredSubtitle">家族の想いを音でつなぐ</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <h3>最近公開された音楽</h3>
+              <span class="chip">New</span>
+            </div>
+            <div id="recentMusicList" class="card-list"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <h3>お気に入りプレイリスト</h3>
+              <span class="chip">Fav</span>
+            </div>
+            <div id="favoritePlaylistList" class="card-list"></div>
+          </div>
+        </section>
+
+        <section class="panel wide-panel">
+          <div class="panel-head">
+            <h3>マイプレイリスト</h3>
+            <span id="playlistCount" class="chip">0件</span>
+          </div>
+          <div id="myPlaylistList" class="playlist-list"></div>
+        </section>
+
+        <section class="player-panel panel">
+          <div class="player-header">
+            <h3>再生中</h3>
+            <span id="playerModeBadge" class="chip mode-chip">通常</span>
+          </div>
+
+          <div class="player-wrap">
+            <video id="videoPlayer" playsinline preload="metadata"></video>
+          </div>
+
+          <div class="player-controls" aria-label="再生コントロール">
+            <button id="prevBtn" class="circle-btn" type="button" aria-label="前の曲">⏮</button>
+            <button id="playPauseBtn" class="play-btn" type="button" aria-label="再生 / 一時停止">▶</button>
+            <button id="nextBtn" class="circle-btn" type="button" aria-label="次の曲">⏭</button>
+          </div>
+
+          <div class="mode-row" aria-label="ループモード">
+            <button type="button" class="mode-btn is-active" data-mode="normal">通常</button>
+            <button type="button" class="mode-btn" data-mode="shuffle">シャッフル</button>
+            <button type="button" class="mode-btn" data-mode="repeat-list">一覧繰り返し</button>
+            <button type="button" class="mode-btn" data-mode="repeat-one">1曲繰り返し</button>
+          </div>
+
+          <div class="timeline" aria-label="再生時間">
+            <span id="currentTime">0:00</span>
+            <div class="progress-bar"><span id="progressFill"></span></div>
+            <span id="totalTime">0:00</span>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="app.js" defer></script>
+  </body>
+</html>
