@@ -74,6 +74,7 @@ const appConfig = window.MUSIC_SHARE_CONFIG || {
 };
 
 const elements = {
+  clearAppCacheBtn: document.getElementById('clearAppCacheBtn'),
   loginSelectBtn: document.getElementById('loginSelectBtn'),
   loginGoogleBtn: document.getElementById('loginGoogleBtn'),
   loginGithubBtn: document.getElementById('loginGithubBtn'),
@@ -4090,7 +4091,29 @@ function restoreActiveScreen() {
   setActiveNavScreen(screen);
 }
 
+async function clearAppCache() {
+  try {
+    if ('serviceWorker' in navigator) {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(registrations.map((registration) => registration.unregister()));
+    }
+
+    if ('caches' in window) {
+      const cacheNames = await caches.keys();
+      await Promise.all(cacheNames.map((cacheName) => caches.delete(cacheName)));
+    }
+  } finally {
+    const url = new URL(window.location.href);
+    url.searchParams.set('__cache_bust', String(Date.now()));
+    window.location.replace(url.toString());
+  }
+}
+
 function bindEvents() {
+  if (elements.clearAppCacheBtn) {
+    elements.clearAppCacheBtn.addEventListener('click', clearAppCache);
+  }
+
   if (elements.navHomeBtn) {
     elements.navHomeBtn.addEventListener('click', () => setActiveNavScreen('home'));
   }

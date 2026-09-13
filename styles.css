@@ -199,6 +199,27 @@ input {
   line-height: 1.4;
 }
 
+.clear-cache-btn {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 10px;
+  border: 1px solid rgba(126, 201, 255, 0.32);
+  border-radius: 8px;
+  padding: 0.32rem 0.48rem;
+  background: rgba(126, 201, 255, 0.08);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.68rem;
+  cursor: pointer;
+}
+
+.clear-cache-btn:hover,
+.clear-cache-btn:focus-visible {
+  border-color: var(--primary);
+  background: rgba(126, 201, 255, 0.16);
+  color: var(--text);
+}
+
 .eyebrow {
   display: block;
   margin: 0 0 2px;
@@ -3643,6 +3664,11 @@ body.player-is-expanded {
   .left-sidebar .brand-description,
   .left-sidebar .eyebrow {
     display: none;
+  }
+
+  .left-sidebar .clear-cache-btn {
+    margin-top: 6px;
+    font-size: 0.62rem;
   }
 
   .left-sidebar .brand-block h1 {
