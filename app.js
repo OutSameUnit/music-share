@@ -3220,7 +3220,11 @@ function openProfileModal() {
   bindProfileIconOptions();
 
   if (elements.profileModalPanel) {
+    elements.profileModalPanel.style.position = '';
     elements.profileModalPanel.style.transform = '';
+    elements.profileModalPanel.style.top = '';
+    elements.profileModalPanel.style.maxHeight = '';
+    elements.profileModalPanel.style.bottom = '';
   }
   elements.profileModal.classList.remove('hidden');
   elements.profileModal.setAttribute('aria-hidden', 'false');
@@ -3232,7 +3236,11 @@ function closeProfileModal() {
     elements.profileModal.setAttribute('aria-hidden', 'true');
   }
   if (elements.profileModalPanel) {
+    elements.profileModalPanel.style.position = '';
     elements.profileModalPanel.style.transform = '';
+    elements.profileModalPanel.style.top = '';
+    elements.profileModalPanel.style.maxHeight = '';
+    elements.profileModalPanel.style.bottom = '';
   }
 }
 
@@ -3247,18 +3255,14 @@ function keepProfileInputVisible() {
   window.setTimeout(() => {
     const viewport = window.visualViewport;
     const visibleTop = viewport?.offsetTop || 0;
-    const visibleBottom = visibleTop + (viewport?.height || window.innerHeight);
-    const inputRect = input.getBoundingClientRect();
-    const margin = 24;
-    let shift = 0;
-
-    if (inputRect.bottom > visibleBottom - margin) {
-      shift = visibleBottom - margin - inputRect.bottom;
-    } else if (inputRect.top < visibleTop + margin) {
-      shift = visibleTop + margin - inputRect.top;
-    }
-
-    panel.style.transform = shift ? `translateY(${shift}px)` : '';
+    const margin = 12;
+    const visibleHeight = Math.max(240, (viewport?.height || window.innerHeight) - margin * 2);
+    panel.style.position = 'fixed';
+    panel.style.top = `${visibleTop + margin}px`;
+    panel.style.bottom = 'auto';
+    panel.style.maxHeight = `${visibleHeight}px`;
+    panel.style.transform = 'none';
+    panel.scrollTop = Math.max(0, input.offsetTop - 72);
   }, 120);
 }
 
