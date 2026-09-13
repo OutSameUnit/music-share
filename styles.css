@@ -4047,19 +4047,11 @@ body.player-is-expanded {
   }
 
   .player-viewport-controls {
-    right: 10px;
-    bottom: 10px;
-    left: 10px;
-    gap: 12px;
-    padding: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 14px;
-    background: rgba(5, 12, 21, 0.72);
-    backdrop-filter: blur(8px);
+    display: none !important;
   }
 
-  .player-controls {
-    gap: 10px;
+  .player-viewport .close-player-btn {
+    display: none !important;
   }
 
   .player-bottom-row {
