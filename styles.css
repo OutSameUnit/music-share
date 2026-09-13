@@ -54,6 +54,7 @@ input {
 }
 
 .music-app {
+  position: relative;
   display: grid;
   grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--rightbar-width);
   width: min(1440px, 100%);
@@ -200,6 +201,10 @@ input {
 }
 
 .clear-cache-btn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 30;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -4136,9 +4141,9 @@ body.player-is-expanded {
   }
 
   .topbar-actions .clear-cache-btn {
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: end;
+    position: fixed;
+    top: 12px;
+    right: 12px;
   }
 
   .hero-banner {
