@@ -151,6 +151,10 @@
         "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; git status --short --branch; git remote -v$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; node --check \\.\\\\app\\.js; git diff --check; git status --short --branch$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }

@@ -178,7 +178,6 @@ const elements = {
   uploadSubmitBtn: document.getElementById('uploadSubmitBtn'),
   uploadStatus: document.getElementById('uploadStatus'),
   appToast: document.getElementById('appToast'),
-  openExternalBrowserBtn: document.getElementById('openExternalBrowserBtn'),
   clearQueueBtn: document.getElementById('clearQueueBtn'),
   mobileQueueToggleBtn: document.getElementById('mobileQueueToggleBtn'),
   mobileQueueCloseBtn: document.getElementById('mobileQueueCloseBtn'),
@@ -4091,23 +4090,7 @@ function restoreActiveScreen() {
   setActiveNavScreen(screen);
 }
 
-function isLineInAppBrowser() {
-  return /Line\//i.test(navigator.userAgent || '');
-}
-
 function bindEvents() {
-  if (elements.openExternalBrowserBtn) {
-    const isLineBrowser = isLineInAppBrowser();
-    elements.openExternalBrowserBtn.classList.toggle('hidden', !isLineBrowser);
-    elements.openExternalBrowserBtn.addEventListener('click', () => {
-      const externalUrl = new URL(window.location.href);
-      const openedWindow = window.open(externalUrl.toString(), '_blank', 'noopener,noreferrer');
-      if (!openedWindow) {
-        showAppToast('LINEのメニューから「外部ブラウザで開く」を選択してください', 'info');
-      }
-    });
-  }
-
   if (elements.navHomeBtn) {
     elements.navHomeBtn.addEventListener('click', () => setActiveNavScreen('home'));
   }
