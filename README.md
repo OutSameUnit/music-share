@@ -50,3 +50,5 @@ GitHub PagesでOAuthログインする場合は、Supabase Dashboardの **Authen
 - Redirect URLs: `https://<ユーザー名>.github.io/<リポジトリ名>/` と `http://localhost:8000/`
 
 アプリはログイン開始時の現在ページURLを `redirectTo` として渡します。GitHub Pagesをリポジトリ配下で公開する場合は、末尾の `/リポジトリ名/` まで含めて登録してください。未登録の場合、SupabaseのSite URLへフォールバックし、localhostへ戻ることがあります。
+
+LINE内ブラウザでは、Googleが埋め込みWebViewからのOAuthを拒否することがあります。アプリはLINE内ブラウザを検出するとOAuth画面を別ウィンドウで開きます。認証できない場合は、LINEのメニューから「外部ブラウザで開く」を選択してください。

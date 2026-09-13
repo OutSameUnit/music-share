@@ -883,6 +883,19 @@ input {
   gap: 12px;
 }
 
+.external-browser-btn {
+  border-color: rgba(126, 227, 179, 0.48);
+  background: rgba(126, 227, 179, 0.12);
+  color: #dfffee;
+  white-space: nowrap;
+}
+
+.external-browser-btn:hover,
+.external-browser-btn:focus-visible {
+  border-color: var(--accent);
+  background: rgba(126, 227, 179, 0.2);
+}
+
 .top-search-results {
   position: relative;
   z-index: 14;
