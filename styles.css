@@ -192,6 +192,12 @@ input {
   letter-spacing: -0.04em;
 }
 
+.brand-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .brand-description {
   margin: 4px 0 0;
   color: var(--muted);
@@ -202,7 +208,7 @@ input {
 .clear-cache-btn {
   display: inline-flex;
   align-items: center;
-  margin-top: 10px;
+  margin: 0 0 0 auto;
   border: 1px solid rgba(126, 201, 255, 0.32);
   border-radius: 8px;
   padding: 0.32rem 0.48rem;
@@ -3667,7 +3673,7 @@ body.player-is-expanded {
   }
 
   .left-sidebar .clear-cache-btn {
-    margin-top: 6px;
+    margin: 0 0 0 auto;
     font-size: 0.62rem;
   }
 
