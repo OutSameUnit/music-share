@@ -192,12 +192,6 @@ input {
   letter-spacing: -0.04em;
 }
 
-.brand-title-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .brand-description {
   margin: 4px 0 0;
   color: var(--muted);
@@ -208,14 +202,19 @@ input {
 .clear-cache-btn {
   display: inline-flex;
   align-items: center;
-  margin: 0 0 0 auto;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  margin: 0;
   border: 1px solid rgba(126, 201, 255, 0.32);
-  border-radius: 8px;
-  padding: 0.32rem 0.48rem;
+  border-radius: 10px;
+  padding: 0;
   background: rgba(126, 201, 255, 0.08);
   color: var(--muted);
   font: inherit;
-  font-size: 0.68rem;
+  font-size: 1.35rem;
+  line-height: 1;
   cursor: pointer;
 }
 
@@ -4134,6 +4133,12 @@ body.player-is-expanded {
 
   .topbar-actions > button {
     min-width: 0;
+  }
+
+  .topbar-actions .clear-cache-btn {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
   }
 
   .hero-banner {
