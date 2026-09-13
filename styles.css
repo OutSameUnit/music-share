@@ -4080,6 +4080,18 @@ body.player-is-expanded {
   .mini-card {
     min-width: 0;
   }
+
+  .profile-modal {
+    align-items: flex-start;
+    overflow-y: auto;
+    padding: 12px;
+  }
+
+  .profile-modal-panel {
+    max-height: calc(100dvh - 24px);
+    margin: 0 auto;
+    overflow-y: auto;
+  }
 }
 
 @media (max-width: 520px) {

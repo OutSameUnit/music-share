@@ -3229,6 +3229,18 @@ function closeProfileModal() {
   }
 }
 
+function keepProfileInputVisible() {
+  const input = elements.profileNicknameInput;
+  const modal = elements.profileModal;
+  if (!input || !modal || modal.classList.contains('hidden')) {
+    return;
+  }
+
+  window.setTimeout(() => {
+    input.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
+  }, 80);
+}
+
 function closePublicProfileModal() {
   if (elements.publicProfileModal) {
     elements.publicProfileModal.classList.add('hidden');
@@ -4167,7 +4179,11 @@ function bindEvents() {
 
   if (elements.profileNicknameInput) {
     elements.profileNicknameInput.addEventListener('input', updateProfilePreview);
+    elements.profileNicknameInput.addEventListener('focus', keepProfileInputVisible);
   }
+
+  window.visualViewport?.addEventListener('resize', keepProfileInputVisible);
+  window.visualViewport?.addEventListener('scroll', keepProfileInputVisible);
 
   if (elements.topSearchInput) {
     elements.topSearchInput.addEventListener('input', renderTopSearchResults);
