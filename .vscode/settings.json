@@ -147,6 +147,10 @@
         "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; git add README\\.md; git add -f docs/project-context\\.md docs/implementation-roadmap\\.md; git commit -m \"Document current app features\"; git push origin main; git status --short --branch$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; git status --short --branch; git remote -v$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }

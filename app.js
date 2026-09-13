@@ -92,6 +92,7 @@ const elements = {
   authModal: document.getElementById('authModal'),
   closeAuthModalBtn: document.getElementById('closeAuthModalBtn'),
   profileModal: document.getElementById('profileModal'),
+  profileModalPanel: document.querySelector('#profileModal .profile-modal-panel'),
   publicProfileModal: document.getElementById('publicProfileModal'),
   closeProfileModalBtn: document.getElementById('closeProfileModalBtn'),
   closePublicProfileModalBtn: document.getElementById('closePublicProfileModalBtn'),
@@ -3218,6 +3219,9 @@ function openProfileModal() {
 
   bindProfileIconOptions();
 
+  if (elements.profileModalPanel) {
+    elements.profileModalPanel.style.transform = '';
+  }
   elements.profileModal.classList.remove('hidden');
   elements.profileModal.setAttribute('aria-hidden', 'false');
 }
@@ -3227,18 +3231,35 @@ function closeProfileModal() {
     elements.profileModal.classList.add('hidden');
     elements.profileModal.setAttribute('aria-hidden', 'true');
   }
+  if (elements.profileModalPanel) {
+    elements.profileModalPanel.style.transform = '';
+  }
 }
 
 function keepProfileInputVisible() {
   const input = elements.profileNicknameInput;
   const modal = elements.profileModal;
-  if (!input || !modal || modal.classList.contains('hidden')) {
+  const panel = elements.profileModalPanel;
+  if (!input || !modal || !panel || modal.classList.contains('hidden') || document.activeElement !== input) {
     return;
   }
 
   window.setTimeout(() => {
-    input.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
-  }, 80);
+    const viewport = window.visualViewport;
+    const visibleTop = viewport?.offsetTop || 0;
+    const visibleBottom = visibleTop + (viewport?.height || window.innerHeight);
+    const inputRect = input.getBoundingClientRect();
+    const margin = 24;
+    let shift = 0;
+
+    if (inputRect.bottom > visibleBottom - margin) {
+      shift = visibleBottom - margin - inputRect.bottom;
+    } else if (inputRect.top < visibleTop + margin) {
+      shift = visibleTop + margin - inputRect.top;
+    }
+
+    panel.style.transform = shift ? `translateY(${shift}px)` : '';
+  }, 120);
 }
 
 function closePublicProfileModal() {
