@@ -4650,7 +4650,13 @@ function bindEvents() {
   });
 
   if (elements.expandPlayerBtn) {
-    elements.expandPlayerBtn.addEventListener('click', togglePlayerExpanded);
+    const handleExpandPlayer = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      togglePlayerExpanded();
+    };
+    elements.expandPlayerBtn.addEventListener('click', handleExpandPlayer);
+    elements.expandPlayerBtn.addEventListener('touchend', handleExpandPlayer, { passive: false });
   }
 
   if (elements.closePlayerBtn) {
