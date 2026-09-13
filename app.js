@@ -2473,6 +2473,17 @@ function toggleFallbackPlayerExpanded() {
 
   const expanded = viewport.classList.toggle('is-expanded');
   elements.expandPlayerBtn?.setAttribute('aria-label', expanded ? '再生画面を縮小' : '再生画面を拡大');
+
+  if (expanded) {
+    const resetPageScroll = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+    resetPageScroll();
+    window.requestAnimationFrame(resetPageScroll);
+  }
+
   showPlayerControls();
 }
 
@@ -2640,6 +2651,7 @@ function loadTrack(index, autoplay = true) {
 
   updatePlayerMeta(track);
   updateCustomPlayerViewport(track);
+  updateMediaSession(track);
 
   if (track.ownerId && track.artist === '匿名アカウント') {
     hydrateTrackAuthor(track).then((updated) => {
@@ -2686,6 +2698,41 @@ function togglePlayback() {
   } else {
     elements.videoPlayer.pause();
   }
+}
+
+function updateMediaSession(track = state.queue[state.currentTrackIndex]) {
+  if (!('mediaSession' in navigator) || !track) {
+    return;
+  }
+
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: track.title || 'Music Share',
+    artist: track.artist || '匿名アカウント',
+    album: 'Music Share',
+  });
+}
+
+function setupMediaSession() {
+  if (!('mediaSession' in navigator)) {
+    return;
+  }
+
+  const actions = {
+    play: () => elements.videoPlayer?.play().catch(() => {}),
+    pause: () => elements.videoPlayer?.pause(),
+    seekbackward: () => seekBySeconds(-10),
+    seekforward: () => seekBySeconds(10),
+    previoustrack: () => loadTrack(getPreviousIndex(), true),
+    nexttrack: () => loadTrack(getNextIndex(), true),
+  };
+
+  Object.entries(actions).forEach(([action, handler]) => {
+    try {
+      navigator.mediaSession.setActionHandler(action, handler);
+    } catch {
+      // Safari may reject unsupported Media Session actions.
+    }
+  });
 }
 
 function createPlaylist() {
@@ -4615,8 +4662,14 @@ function bindEvents() {
   if (elements.videoPlayer) {
     elements.videoPlayer.addEventListener('contextmenu', (event) => event.preventDefault());
     elements.videoPlayer.addEventListener('dragstart', (event) => event.preventDefault());
-    elements.videoPlayer.addEventListener('play', updatePlayButton);
-    elements.videoPlayer.addEventListener('pause', updatePlayButton);
+    elements.videoPlayer.addEventListener('play', () => {
+      updatePlayButton();
+      if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing';
+    });
+    elements.videoPlayer.addEventListener('pause', () => {
+      updatePlayButton();
+      if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
+    });
     elements.videoPlayer.addEventListener('play', () => updateCustomPlayerViewport());
     elements.videoPlayer.addEventListener('pause', () => updateCustomPlayerViewport());
     elements.videoPlayer.addEventListener('loadedmetadata', updateProgress);
@@ -4658,6 +4711,8 @@ function bindEvents() {
     elements.expandPlayerBtn.addEventListener('click', handleExpandPlayer);
     elements.expandPlayerBtn.addEventListener('touchend', handleExpandPlayer, { passive: false });
   }
+
+  setupMediaSession();
 
   if (elements.closePlayerBtn) {
     elements.closePlayerBtn.addEventListener('click', closePlayerControls);
