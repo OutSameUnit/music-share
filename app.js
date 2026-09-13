@@ -2472,16 +2472,22 @@ function toggleFallbackPlayerExpanded() {
   }
 
   const expanded = viewport.classList.toggle('is-expanded');
+  document.body.classList.toggle('player-is-expanded', expanded);
   elements.expandPlayerBtn?.setAttribute('aria-label', expanded ? '再生画面を縮小' : '再生画面を拡大');
 
   if (expanded) {
     const resetPageScroll = () => {
       window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      document.scrollingElement?.scrollTo({ top: 0, left: 0, behavior: 'auto' });
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
     };
     resetPageScroll();
-    window.requestAnimationFrame(resetPageScroll);
+    window.requestAnimationFrame(() => {
+      resetPageScroll();
+      viewport.scrollIntoView({ block: 'start', inline: 'nearest' });
+      resetPageScroll();
+    });
   }
 
   showPlayerControls();
@@ -2539,6 +2545,7 @@ function hidePlayerControls() {
 function closePlayerControls() {
   if (elements.playerViewport?.classList.contains('is-expanded')) {
     elements.playerViewport.classList.remove('is-expanded');
+    document.body.classList.remove('player-is-expanded');
     elements.expandPlayerBtn?.setAttribute('aria-label', '再生画面を拡大');
   }
 

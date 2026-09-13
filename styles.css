@@ -2935,6 +2935,11 @@ input {
   pointer-events: auto;
 }
 
+body.player-is-expanded {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 .player-controls {
   display: flex;
   flex-wrap: wrap;
