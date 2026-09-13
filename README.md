@@ -41,3 +41,12 @@ Windowsでは `run-local-server.bat` から起動することもできます。
 - Supabaseを利用する場合は `supabase-schema.sql` を適用し、RLSポリシーを有効にしてください。
 - サムネイルがない曲は、音符アイコンのプレースホルダーで表示されます。
 - 認証・クラウド設定がない環境では、利用可能な機能が匿名・ローカル保存モードに制限されます。
+
+### OAuthのリダイレクト設定
+
+GitHub PagesでOAuthログインする場合は、Supabase Dashboardの **Authentication > URL Configuration** に次のURLを登録してください。
+
+- Site URL: `https://<ユーザー名>.github.io/<リポジトリ名>/`
+- Redirect URLs: `https://<ユーザー名>.github.io/<リポジトリ名>/` と `http://localhost:8000/`
+
+アプリはログイン開始時の現在ページURLを `redirectTo` として渡します。GitHub Pagesをリポジトリ配下で公開する場合は、末尾の `/リポジトリ名/` まで含めて登録してください。未登録の場合、SupabaseのSite URLへフォールバックし、localhostへ戻ることがあります。

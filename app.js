@@ -3688,8 +3688,11 @@ async function signInWithProvider(providerName) {
   }
 
   const provider = ['google', 'github'].includes(providerName) ? providerName : getConfiguredAuthProvider();
+  const redirectUrl = new URL(window.location.href);
+  redirectUrl.search = '';
+  redirectUrl.hash = '';
   const options = {
-    redirectTo: window.location.origin,
+    redirectTo: redirectUrl.toString(),
   };
 
   if (provider === 'google') {
