@@ -3,120 +3,678 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Music Share - Gmailログインに対応した家族向け音楽共有アプリ" />
+    <meta name="description" content="Music Share - 友人や知人と音楽を共有できるアプリ" />
     <title>Music Share</title>
+    <meta name="theme-color" content="#0f1a24" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="app-shell">
-      <header class="topbar">
+    <div class="music-app">
+      <aside class="sidebar left-sidebar">
+        <button id="sidebarToggleBtn" class="sidebar-toggle-btn" type="button" aria-label="メニューを展開" aria-expanded="false" title="メニューを展開">☰</button>
         <div class="brand-block">
-          <span class="eyebrow">Music Share</span>
-          <h1>家族と音楽を共有する</h1>
+          <span class="brand-mark">♪</span>
+          <div>
+            <span class="eyebrow">簡単に共有</span>
+            <h1>Music Share</h1>
+            <p class="brand-description">音楽を家族・友人・仲間に広げましょう。</p>
+          </div>
         </div>
 
-        <div class="topbar-actions">
-          <div id="userBadge" class="user-badge hidden">匿名アカウント</div>
-          <button id="loginGoogleBtn" class="primary-btn" type="button">Googleでログイン</button>
-          <button id="loginGithubBtn" class="primary-btn" type="button">GitHubでログイン</button>
-          <button id="logoutBtn" class="ghost-btn hidden" type="button">ログアウト</button>
+        <nav class="side-nav" aria-label="メインメニュー">
+          <button id="navHomeBtn" class="nav-item is-active" type="button" data-nav-screen="home" title="ホーム" aria-label="ホーム"><span class="nav-item-icon" aria-hidden="true">⌂</span><span class="nav-item-label">ホーム</span></button>
+          <button id="navMyMusicBtn" class="nav-item" type="button" data-nav-screen="my-music" title="私の音楽" aria-label="私の音楽"><span class="nav-item-icon" aria-hidden="true">♫</span><span class="nav-item-label">私の音楽</span></button>
+        </nav>
+
+      </aside>
+
+      <main class="main-panel">
+        <div id="authLoadingShell" class="auth-loading-shell hidden" aria-live="polite">
+          <div class="auth-loading-card">
+            <span class="loading-spinner" aria-hidden="true"></span>
+            <strong>認証中です</strong>
+            <p>ログイン状態を確認しています...</p>
+          </div>
         </div>
-      </header>
 
-      <main class="page-content">
-        <section class="hero grid-two">
-          <div class="hero-copy">
-            <p class="mini-label">最近公開された音楽</p>
-            <h2>やさしい時間を、家族と一緒に。</h2>
-            <p class="lead">
-              お気に入りの曲や思い出を、家族だけのプレイリストとして共有できます。
-            </p>
-            <div class="hero-actions">
-              <button id="createPlaylistBtn" class="primary-btn" type="button">プレイリスト作成</button>
-              <label class="upload-btn" for="videoUploadInput">
-                <input id="videoUploadInput" type="file" accept="video/*" multiple />
-                <span>動画をアップロード</span>
-              </label>
-            </div>
-            <p id="authHint" class="auth-hint">
-              匿名ユーザーとして利用中です。ログインするとプレイリスト作成とアップロードができます。
-            </p>
+        <header class="main-topbar">
+          <label class="search-box" aria-label="検索">
+            <span class="search-icon">⌕</span>
+            <input id="topSearchInput" type="search" placeholder="曲、アーティスト、プレイリストを検索" autocomplete="off" />
+          </label>
+
+          <div class="topbar-actions">
+            <button id="userBadge" class="user-badge hidden" type="button" aria-label="マイページを開く">匿名アカウント</button>
+            <button id="loginSelectBtn" class="primary-btn" type="button">ログイン</button>
+            <button id="logoutBtn" class="ghost-btn hidden" type="button">ログアウト</button>
+          </div>
+        </header>
+
+        <section id="topSearchResults" class="top-search-results hidden" aria-live="polite" aria-label="検索結果"></section>
+
+        <section class="player-panel panel hidden">
+          <div class="player-track-header">
+            <span class="mini-label">Now playing</span>
           </div>
 
-          <div class="featured-card">
-            <div class="featured-header">
-              <span>Featured</span>
-              <span id="featuredMode">匿名モード</span>
+          <div class="player-track-main">
+            <div class="player-cover">♪</div>
+            <div class="player-track-copy">
+              <h3 id="playerTitle"></h3>
+              <div class="player-meta-line">
+                <span id="playerDate"></span>
+                <button id="playerArtist" class="player-artist-btn" type="button"></button>
+                <button id="playerFavoriteBtn" class="player-favorite-btn" type="button">★追加</button>
+                <button id="playerShareBtn" class="row-action" type="button">共有</button>
+              </div>
             </div>
-            <div class="featured-art">♪</div>
-            <div class="featured-info">
-              <h3 id="featuredTitle">ここだけのプレイリスト</h3>
-              <p id="featuredSubtitle">家族の想いを音でつなぐ</p>
-            </div>
-          </div>
-        </section>
-
-        <section class="content-grid">
-          <div class="panel">
-            <div class="panel-head">
-              <h3>最近公開された音楽</h3>
-              <span class="chip">New</span>
-            </div>
-            <div id="recentMusicList" class="card-list"></div>
-          </div>
-
-          <div class="panel">
-            <div class="panel-head">
-              <h3>お気に入りプレイリスト</h3>
-              <span class="chip">Fav</span>
-            </div>
-            <div id="favoritePlaylistList" class="card-list"></div>
-          </div>
-        </section>
-
-        <section class="panel wide-panel">
-          <div class="panel-head">
-            <h3>マイプレイリスト</h3>
-            <span id="playlistCount" class="chip">0件</span>
-          </div>
-          <div id="myPlaylistList" class="playlist-list"></div>
-        </section>
-
-        <section class="player-panel panel">
-          <div class="player-header">
-            <h3>再生中</h3>
-            <span id="playerModeBadge" class="chip mode-chip">通常</span>
           </div>
 
           <div class="player-wrap">
-            <video id="videoPlayer" playsinline preload="metadata"></video>
+            <div id="playerViewport" class="player-viewport" role="img" aria-label="再生中のカバー画像">
+              <video id="videoPlayer" class="player-viewport-video" playsinline preload="metadata" controlsList="nodownload noplaybackrate" disablePictureInPicture></video>
+              <div class="player-viewport-overlay"></div>
+              <div class="player-viewport-message">
+                <strong id="playerViewportTitle">曲を選択</strong>
+                <small id="playerViewportArtist">再生中の情報がここに表示されます</small>
+              </div>
+              <button id="closePlayerBtn" class="close-player-btn" type="button" aria-label="再生画面の操作を閉じる">×</button>
+              <div class="player-viewport-controls">
+                <div class="player-controls" aria-label="再生コントロール">
+                  <button id="prevBtn" class="circle-btn" type="button" aria-label="前の曲">⏮</button>
+                  <button id="skipBackBtn" class="circle-btn compact-btn" type="button" aria-label="10秒戻る">↶</button>
+                  <button id="playPauseBtn" class="play-btn" type="button" aria-label="再生 / 一時停止">▶</button>
+                  <button id="skipForwardBtn" class="circle-btn compact-btn" type="button" aria-label="10秒進む">↷</button>
+                  <button id="nextBtn" class="circle-btn" type="button" aria-label="次の曲">⏭</button>
+                </div>
+
+                <div class="timeline" aria-label="再生時間">
+                  <span id="currentTime">0:00</span>
+                  <div class="progress-bar" role="slider" tabindex="0" aria-label="再生位置" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0"><span id="progressFill"></span></div>
+                  <span id="totalTime">0:00</span>
+                </div>
+
+                <div class="player-bottom-row">
+                  <div class="mode-row" aria-label="ループモード">
+                  <button type="button" class="mode-btn" data-mode="repeat-one">1曲繰り返し</button>
+                  <button type="button" class="mode-btn is-active" data-mode="queue">キュー連続再生</button>
+                  <button type="button" class="mode-btn" data-mode="shuffle">キューシャッフル</button>
+                  </div>
+                  <button id="expandPlayerBtn" class="expand-player-btn" type="button" aria-label="再生画面を拡大"><span aria-hidden="true">⛶</span></button>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="player-controls" aria-label="再生コントロール">
-            <button id="prevBtn" class="circle-btn" type="button" aria-label="前の曲">⏮</button>
-            <button id="playPauseBtn" class="play-btn" type="button" aria-label="再生 / 一時停止">▶</button>
-            <button id="nextBtn" class="circle-btn" type="button" aria-label="次の曲">⏭</button>
+          <div class="player-description" aria-label="音楽の説明">
+            <div class="player-description-copy">
+              <span class="player-description-label">説明</span>
+              <p id="playerDescriptionText">説明はありません</p>
+            </div>
+            <button id="playerDescriptionToggle" class="ghost-btn hidden" type="button" aria-expanded="false">すべて見る</button>
           </div>
 
-          <div class="mode-row" aria-label="ループモード">
-            <button type="button" class="mode-btn is-active" data-mode="normal">通常</button>
-            <button type="button" class="mode-btn" data-mode="shuffle">シャッフル</button>
-            <button type="button" class="mode-btn" data-mode="repeat-list">一覧繰り返し</button>
-            <button type="button" class="mode-btn" data-mode="repeat-one">1曲繰り返し</button>
+        </section>
+
+        <button id="mobileQueueToggleBtn" class="mobile-queue-toggle-btn hidden" type="button" aria-expanded="false" aria-controls="mobileQueueDrawer">
+          <span class="mobile-queue-toggle-icon" aria-hidden="true">☰</span>
+          <span>キューとプレイリスト</span>
+        </button>
+
+        <section id="homeScreen" class="view-section">
+          <section id="anonymousView" class="view-section anonymous-view">
+            <div class="hero-banner">
+              <div class="hero-copy">
+                <p class="mini-label">みんなと音楽を共有</p>
+                <h2>気になる曲を、みんなと一緒に。</h2>
+                <p class="lead">
+                  好きな曲を見つけて、プレイリストを作成し、友人や知人に共有して、一緒に音楽の時間を楽しみましょう。
+                </p>
+                <div class="hero-actions">
+                  <button id="anonymousLoginBtn" class="primary-btn" type="button">ログインして始める</button>
+                  <button id="anonymousPreviewBtn" class="ghost-btn hidden" type="button">人気のプレイリストを視聴する</button>
+                </div>
+                <p id="authHint" class="auth-hint">
+                  匿名ユーザーとして利用中です。ログインするとプレイリスト作成とアップロードができます。
+                </p>
+              </div>
+
+              <div class="featured-card hidden">
+                <div class="featured-header">
+                  <span>おすすめ</span>
+                  <span id="featuredMode" class="featured-mode-pill">みんなのおすすめ</span>
+                </div>
+                <div class="featured-art">♪</div>
+                <div class="featured-info">
+                  <h3 id="featuredTitle">ここだけのプレイリスト</h3>
+                  <p id="featuredSubtitle">お気に入りの曲をみんなに届ける</p>
+                </div>
+              </div>
+            </div>
+            <section id="anonymousMusicPanel" class="panel anonymous-music-panel">
+              <div class="panel-head">
+                <h3>公開されている音楽</h3>
+                <span class="chip">再生できます</span>
+              </div>
+              <div id="anonymousMusicList" class="card-list"></div>
+            </section>
+          </section>
+
+          <section id="memberView" class="view-section hidden">
+          <div class="hero-banner member-banner">
+            <div class="hero-copy">
+              <p class="mini-label">My library</p>
+              <h2>あなたの音楽</h2>
+              <p class="lead">
+                あなたの音楽を広げましょう。すぐに公開できます。
+              </p>
+              <div class="hero-actions">
+                <label class="upload-btn" for="videoUploadInput">
+                  <input id="videoUploadInput" type="file" accept="video/*,audio/*" multiple />
+                  <span class="upload-btn-icon" aria-hidden="true">♫</span>
+                  <span>音楽ファイルをアップロード</span>
+                </label>
+              </div>
+              <div class="upload-metadata hidden" aria-label="アップロード情報">
+                <label>
+                  <span>タイトル</span>
+                  <input id="uploadTitleInput" type="text" placeholder="ファイル名から自動入力" />
+                </label>
+                <label>
+                  <span>説明（任意）</span>
+                  <textarea id="uploadDescriptionInput" rows="5" placeholder="説明を入力"></textarea>
+                </label>
+                <div class="playlist-picker">
+                  <label for="uploadPlaylistSearch">追加プレイリスト（任意）</label>
+                  <div class="playlist-picker-search-row">
+                    <input id="uploadPlaylistSearch" type="search" placeholder="プレイリストを検索" autocomplete="off" />
+                    <button id="uploadNewPlaylistBtn" class="playlist-add-btn" type="button"><span aria-hidden="true">＋</span> 新規追加</button>
+                  </div>
+                  <div class="playlist-picker-select-row">
+                    <div id="uploadPlaylistSelect" class="playlist-checkbox-list" role="group" aria-label="追加プレイリスト"></div>
+                    <select id="uploadPlaylistSort" aria-label="プレイリストの並び順">
+                      <option value="created-desc" selected>新しい順</option>
+                      <option value="name">名前順</option>
+                      <option value="created-asc">古い順</option>
+                    </select>
+                  </div>
+                </div>
+                <button id="uploadSubmitBtn" class="primary-btn" type="button" disabled>音楽を公開</button>
+              </div>
+              <div id="uploadStatus" class="upload-status hidden" role="status" aria-live="polite"></div>
+              <p id="authHintMember" class="auth-hint">
+                ログイン中です。プレイリストとアップロードの機能が利用できます。
+              </p>
+            </div>
           </div>
 
-          <div class="timeline" aria-label="再生時間">
-            <span id="currentTime">0:00</span>
-            <div class="progress-bar"><span id="progressFill"></span></div>
-            <span id="totalTime">0:00</span>
+          <div class="content-grid">
+            <div class="panel ranking-panel">
+              <div class="panel-head">
+                <h3>30日以内に追加された音楽</h3>
+                <div class="panel-head-actions">
+                  <span class="chip">New</span>
+                  <button id="playAllRecentMusicBtn" class="panel-action-btn" type="button">全曲再生</button>
+                </div>
+              </div>
+              <div id="recentMusicList" class="card-list music-list-scroll"></div>
+            </div>
+
+            <div class="panel ranking-panel">
+              <div class="panel-head">
+                <h3>30日以内に作成されたプレイリスト</h3>
+                <span class="chip">New</span>
+              </div>
+              <div id="recentPlaylistList" class="card-list playlist-list-scroll"></div>
+            </div>
+
+            <div class="panel ranking-panel">
+              <div class="panel-head">
+                <h3>お気に入りが多い音楽</h3>
+                <div class="panel-head-actions">
+                  <span class="chip">Like</span>
+                  <button id="playAllFavoriteMusicBtn" class="panel-action-btn" type="button">全曲再生</button>
+                </div>
+              </div>
+              <div id="favoriteMusicList" class="card-list music-list-scroll"></div>
+            </div>
+
+            <div class="panel ranking-panel">
+              <div class="panel-head">
+                <h3>お気に入りが多いプレイリスト</h3>
+                <span class="chip">Playlist</span>
+              </div>
+              <div id="popularPlaylistList" class="card-list playlist-list-scroll"></div>
+            </div>
+
+            <div class="panel ranking-panel">
+              <div class="panel-head">
+                <h3>30日以内に最も再生された音楽</h3>
+                <div class="panel-head-actions">
+                  <span class="chip">Play</span>
+                  <button id="playAllMonthlyMusicBtn" class="panel-action-btn" type="button">全曲再生</button>
+                </div>
+              </div>
+              <div id="monthlyPopularMusicList" class="card-list music-list-scroll"></div>
+            </div>
+          </div>
+          </section>
+        </section>
+
+        <section id="myMusicScreen" class="view-section hidden">
+          <div class="hero-banner member-banner">
+            <div class="hero-copy">
+              <p class="mini-label">My music</p>
+              <h2>私の音楽</h2>
+              <p class="lead">自分がアップロードした音楽をすばやく見直し、再生できます。</p>
+            </div>
+          </div>
+          <div class="panel ranking-panel">
+            <div class="panel-head">
+              <h3>アップロード済み音楽</h3>
+              <span class="chip">Library</span>
+            </div>
+            <div id="myMusicMenuList" class="card-list music-list-scroll"></div>
+          </div>
+        </section>
+
+        <section id="favoriteScreen" class="view-section hidden">
+          <div class="hero-banner member-banner">
+            <div class="hero-copy">
+              <p class="mini-label">Favorites</p>
+              <h2>お気に入り</h2>
+              <p class="lead">保存した曲とプレイリストをまとめて確認できます。</p>
+            </div>
+          </div>
+          <div class="content-grid">
+            <div class="panel ranking-panel">
+              <div class="panel-head">
+                <h3>お気に入りの曲</h3>
+                <span class="chip">Songs</span>
+              </div>
+              <div id="favoriteMenuSongsList" class="card-list music-list-scroll"></div>
+            </div>
+            <div class="panel ranking-panel">
+              <div class="panel-head">
+                <h3>お気に入りのプレイリスト</h3>
+                <span class="chip">Playlists</span>
+              </div>
+              <div id="favoriteMenuPlaylistsList" class="card-list playlist-list-scroll"></div>
+            </div>
           </div>
         </section>
       </main>
+
+      <aside id="mobileQueueDrawer" class="sidebar right-sidebar">
+        <div class="sidebar-card queue-card hidden">
+          <div class="panel-head compact-head queue-card-header" role="button" tabindex="0" aria-expanded="true" aria-controls="mobileQueueList">
+            <h3>キュー <span class="queue-collapse-indicator" aria-hidden="true">▾</span></h3>
+            <div class="queue-card-actions">
+              <button id="clearQueueBtn" class="row-action" type="button">クリア</button>
+              <button id="mobileQueueCloseBtn" class="row-action mobile-queue-close-btn" type="button" aria-label="キューを閉じる"><span class="mobile-queue-close-icon" aria-hidden="true">×</span><span>閉じる</span></button>
+            </div>
+          </div>
+          <div id="mobileQueueList" class="queue-list"></div>
+          <div class="queue-playlist-action-row">
+            <button id="queuePlaylistAddToggleBtn" class="primary-btn queue-add-toggle-btn" type="button">プレイリストに追加</button>
+          </div>
+        </div>
+        <div class="sidebar-card sidebar-list-card is-collapsed">
+          <div class="panel-head compact-head">
+            <button type="button" class="sidebar-panel-toggle" data-toggle-panel="favorite-playlist-panel" aria-expanded="false">
+              <span class="toggle-label">お気に入り公開プレイリスト</span>
+              <span class="toggle-icon" aria-hidden="true">▾</span>
+            </button>
+          </div>
+          <div class="panel-body hidden" data-panel="favorite-playlist-panel">
+            <div id="favoritePlaylistList" class="sidebar-list-scroll"></div>
+          </div>
+        </div>
+
+        <div class="sidebar-card sidebar-list-card is-collapsed">
+          <div class="panel-head compact-head">
+            <button type="button" class="sidebar-panel-toggle" data-toggle-panel="my-playlist-panel" aria-expanded="false">
+              <span class="toggle-label">マイプレイリスト</span>
+              <span class="toggle-icon" aria-hidden="true">▾</span>
+            </button>
+            <span id="playlistCount" class="chip">0件</span>
+          </div>
+          <div class="panel-body hidden" data-panel="my-playlist-panel">
+            <div id="myPlaylistList" class="sidebar-playlist-scroll"></div>
+          </div>
+        </div>
+      </aside>
     </div>
 
-    <script src="config.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <div id="queuePlaylistModal" class="playlist-manager-modal hidden" aria-hidden="true">
+      <div class="playlist-manager-backdrop" data-close-queue-playlist="true"></div>
+      <div class="playlist-manager-panel queue-playlist-modal-panel" role="dialog" aria-modal="true" aria-labelledby="queuePlaylistModalTitle">
+        <div class="playlist-manager-header">
+          <div>
+            <span class="mini-label">Add to playlist</span>
+            <h3 id="queuePlaylistModalTitle">プレイリストに追加</h3>
+          </div>
+          <button id="closeQueuePlaylistModalBtn" class="close-btn" type="button" aria-label="閉じる">×</button>
+        </div>
+        <div class="queue-playlist-modal-toolbar">
+          <input id="queuePlaylistModalSearch" type="search" placeholder="プレイリストを検索" autocomplete="off" />
+          <button id="queuePlaylistModalNewBtn" class="playlist-add-btn" type="button"><span aria-hidden="true">＋</span> 新規追加</button>
+        </div>
+        <div id="queuePlaylistModalList" class="queue-playlist-modal-list" role="group" aria-label="追加先プレイリスト"></div>
+        <div class="queue-playlist-modal-footer">
+          <label class="queue-playlist-range-field" for="queueModalAddMode">
+            <span>追加する曲</span>
+            <select id="queueModalAddMode" aria-label="追加する曲の範囲">
+              <option value="current" selected>再生中の曲</option>
+              <option value="all">キューの全曲</option>
+            </select>
+          </label>
+          <button id="addQueueToPlaylistBtn" class="primary-btn" type="button">追加する</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="authModal" class="auth-modal hidden" aria-hidden="true">
+      <div class="auth-modal-backdrop" data-close-auth-modal="true"></div>
+      <div class="auth-modal-panel" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+        <div class="auth-modal-header">
+          <h3 id="authModalTitle">ログイン方法を選択</h3>
+          <button id="closeAuthModalBtn" class="close-btn" type="button" aria-label="閉じる">×</button>
+        </div>
+
+        <div class="auth-provider-list">
+          <button id="loginGoogleBtn" class="provider-btn" type="button">
+            <span class="provider-icon google-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" role="img" aria-label="Google">
+                <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.8-6.1 8-11.3 8-6.9 0-12.5-5.6-12.5-12.5S17.1 11.5 24 11.5c3.1 0 5.9 1.1 8.1 3l5.7-5.7C33.6 4.8 29.2 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21c10.8 0 20.1-7.9 20.1-21 0-1.4-.1-2.8-.5-4.1z"></path>
+                <path fill="#FF3D00" d="M6.5 14.7l7.1 5.2C15.2 17.8 19.2 15 24 15c3.1 0 5.9 1.1 8.1 3l5.7-5.7C33.6 4.8 29.2 3 24 3 15.5 3 8 8.7 6.5 14.7z"></path>
+                <path fill="#4CAF50" d="M24 45c4.8 0 9.2-1.6 12.6-4.3l-5.8-4.8c-1.7 1.2-3.8 1.9-6.8 1.9-5.1 0-9.4-3.3-10.9-7.8l-6.2 4.8C4.4 39.7 13 45 24 45z"></path>
+                <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-1.1 3.3-3.9 5.8-7.4 6.8l.1.1 6.8 5.3c.4-.3 7.8-6.1 7.8-16.2 0-1.4-.1-2.8-.5-4.1z"></path>
+              </svg>
+            </span>
+            <span>Googleでログイン</span>
+          </button>
+
+          <button id="loginGithubBtn" class="provider-btn" type="button">
+            <span class="provider-icon github-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img" aria-label="GitHub">
+                <path fill="currentColor" d="M12 2C6.48 2 2 6.58 2 12.22c0 4.51 2.87 8.34 6.84 9.69.5.1.68-.22.68-.49 0-.24-.01-1.03-.02-1.87-2.78.62-3.37-1.36-3.37-1.36-.45-1.19-1.1-1.5-1.1-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.57 2.34 1.12 2.91.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.08 0-1.12.39-2.04 1.03-2.76-.1-.26-.45-1.32.1-2.75 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.35 1.9-1.33 2.74-1.05 2.74-1.05.55 1.43.21 2.49.1 2.75.64.72 1.03 1.64 1.03 2.76 0 3.95-2.35 4.81-4.58 5.07.36.32.68.95.68 1.91 0 1.38-.01 2.49-.01 2.83 0 .27.18.6.69.49A10.22 10.22 0 0 0 22 12.22C22 6.58 17.52 2 12 2Z"/>
+              </svg>
+            </span>
+            <span>GitHubでログイン</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="profileModal" class="profile-modal hidden" aria-hidden="true">
+      <div class="profile-modal-backdrop" data-close-profile-modal="true"></div>
+      <div class="profile-modal-panel" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+        <div class="profile-modal-header">
+          <h3 id="profileModalTitle">プロフィール設定</h3>
+          <button id="closeProfileModalBtn" class="close-btn" type="button" aria-label="閉じる">×</button>
+        </div>
+
+        <div class="profile-preview">
+          <div id="profileAvatarPreview" class="profile-avatar-preview">🎧</div>
+          <div>
+            <p class="profile-preview-label">表示名</p>
+            <h4 id="profilePreviewName">ユーザー</h4>
+          </div>
+        </div>
+
+        <form id="profileForm" class="profile-form">
+          <label class="field-group">
+            <span>ニックネーム</span>
+            <input id="profileNicknameInput" type="text" maxlength="24" placeholder="例: NightCloud" />
+          </label>
+
+          <label class="field-group">
+            <span>詳細</span>
+            <textarea id="profileBioInput" rows="3" maxlength="120" placeholder="音楽の好みや自己紹介を入力"></textarea>
+            <small class="profile-safety-note"><strong>重要な注意</strong><span>個人情報や悪意のある内容は含めないでください。</span></small>
+          </label>
+
+          <div class="field-group">
+            <span>アイコン</span>
+            <div id="profileIconOptions" class="icon-carousel" aria-label="アイコン選択">
+              <div class="carousel-track"></div>
+            </div>
+          </div>
+
+          <div class="profile-actions">
+            <button type="button" id="cancelProfileBtn" class="ghost-btn" >キャンセル</button>
+            <button type="submit" class="primary-btn">保存</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="publicProfileModal" class="profile-modal hidden" aria-hidden="true">
+      <div class="profile-modal-backdrop" data-close-public-profile="true"></div>
+      <div class="profile-modal-panel" role="dialog" aria-modal="true" aria-labelledby="publicProfileModalTitle">
+        <div class="profile-modal-header">
+          <h3 id="publicProfileModalTitle">投稿者プロフィール</h3>
+          <button id="closePublicProfileModalBtn" class="close-btn" type="button" aria-label="閉じる">×</button>
+        </div>
+        <div class="profile-preview">
+          <div id="publicProfileAvatar" class="profile-avatar-preview">🎧</div>
+          <div>
+            <p class="profile-preview-label">ニックネーム</p>
+            <h4 id="publicProfileName">読み込み中...</h4>
+          </div>
+        </div>
+        <div class="public-profile-section">
+          <p class="public-profile-section-label">自己紹介</p>
+          <p id="publicProfileDetails" class="public-profile-details">プロフィールを読み込んでいます...</p>
+        </div>
+        <div class="public-profile-tabs" role="tablist" aria-label="投稿者の公開コンテンツ">
+          <button id="publicProfileMusicTab" class="public-profile-tab is-active" type="button" role="tab" aria-selected="true">音楽</button>
+          <button id="publicProfilePlaylistsTab" class="public-profile-tab" type="button" role="tab" aria-selected="false">プレイリスト</button>
+        </div>
+        <div id="publicProfileMusicList" class="public-profile-content-list" role="tabpanel"></div>
+        <div id="publicProfilePlaylistsList" class="public-profile-content-list hidden" role="tabpanel"></div>
+        <div class="public-profile-stats" aria-label="投稿者の実績">
+          <div class="public-profile-stat">
+            <strong id="publicProfileMusicCount">-</strong>
+            <span>音楽公開数</span>
+          </div>
+          <div class="public-profile-stat">
+            <strong id="publicProfilePlayCount">-</strong>
+            <span>再生獲得数</span>
+          </div>
+          <div class="public-profile-stat">
+            <strong id="publicProfileFavoriteCount">-</strong>
+            <span>お気に入り獲得数</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="playlistManagerModal" class="playlist-manager-modal hidden" aria-hidden="true">
+      <div class="playlist-manager-backdrop" data-close-playlist-manager="true"></div>
+      <div class="playlist-manager-panel" role="dialog" aria-modal="true" aria-labelledby="playlistManagerTitle">
+        <div class="playlist-manager-header">
+          <div>
+            <span class="mini-label">My playlists</span>
+            <h3 id="playlistManagerTitle">プレイリストを管理</h3>
+          </div>
+          <button id="closePlaylistManagerBtn" class="close-btn" type="button" aria-label="閉じる">×</button>
+        </div>
+        <div class="playlist-manager-toolbar">
+          <input id="playlistManagerSearch" type="search" placeholder="プレイリストを検索" autocomplete="off" />
+          <select id="playlistManagerSort" aria-label="プレイリストの並び順">
+            <option value="created-desc" selected>新しい順</option>
+            <option value="name">名前順</option>
+            <option value="created-asc">古い順</option>
+          </select>
+        </div>
+        <div id="playlistManagerList" class="playlist-manager-list"></div>
+        <div class="playlist-create-row">
+          <div class="playlist-create-heading">
+            <div>
+              <strong>新しいプレイリスト</strong>
+              <small>お気に入りの音楽をまとめる場所を作成</small>
+            </div>
+          </div>
+          <div class="playlist-create-input-row">
+            <input id="newPlaylistNameInput" type="text" placeholder="プレイリスト名を入力してEnter" maxlength="60" />
+            <button id="createPlaylistFromManagerBtn" class="playlist-modal-add-btn" type="button"><span aria-hidden="true">＋</span> 新規追加</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="playlistRenameModal" class="playlist-manager-modal hidden" aria-hidden="true">
+      <div class="playlist-manager-backdrop" data-close-playlist-rename="true"></div>
+      <div class="playlist-manager-panel playlist-rename-panel" role="dialog" aria-modal="true" aria-labelledby="playlistRenameTitle">
+        <div class="playlist-manager-header">
+          <div>
+            <span class="mini-label">Edit playlist</span>
+            <h3 id="playlistRenameTitle">プレイリストを変更</h3>
+          </div>
+          <button id="closePlaylistRenameBtn" class="close-btn" type="button" aria-label="閉じる">×</button>
+        </div>
+        <div class="playlist-rename-form">
+          <label for="playlistRenameInput">新しいプレイリスト名</label>
+          <input id="playlistRenameInput" type="text" maxlength="60" autocomplete="off" />
+          <div class="playlist-icon-picker">
+            <span class="playlist-rename-icon" aria-hidden="true">♫</span>
+            <label for="playlistRenameIconSelect">プレイリストアイコン</label>
+            <select id="playlistRenameIconSelect" class="playlist-icon-select" aria-label="プレイリストアイコン"></select>
+          </div>
+          <div class="playlist-edit-tracks-head">
+            <strong>曲</strong>
+          </div>
+          <div id="playlistEditTracks" class="playlist-edit-tracks"></div>
+          <div class="playlist-rename-actions">
+            <button id="cancelPlaylistRenameBtn" class="ghost-btn" type="button">キャンセル</button>
+            <button id="savePlaylistRenameBtn" class="primary-btn" type="button">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="playlistDeleteModal" class="playlist-manager-modal hidden" aria-hidden="true">
+      <div class="playlist-manager-backdrop" data-close-playlist-delete="true"></div>
+      <div class="playlist-manager-panel playlist-delete-panel" role="dialog" aria-modal="true" aria-labelledby="playlistDeleteTitle">
+        <div class="playlist-manager-header">
+          <div>
+            <span class="mini-label">Remove playlist</span>
+            <h3 id="playlistDeleteTitle">プレイリストを削除</h3>
+          </div>
+          <button id="closePlaylistDeleteBtn" class="close-btn" type="button" aria-label="閉じる">×</button>
+        </div>
+        <div class="playlist-delete-form">
+          <span class="playlist-delete-icon" aria-hidden="true">×</span>
+          <strong id="playlistDeleteName"></strong>
+          <p>このプレイリストを削除しますか？登録されている曲も一覧から外れます。</p>
+          <div class="playlist-rename-actions">
+            <button id="cancelPlaylistDeleteBtn" class="ghost-btn" type="button">キャンセル</button>
+            <button id="confirmPlaylistDeleteBtn" class="danger-btn" type="button">削除する</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="playlistVisibilityModal" class="playlist-manager-modal hidden" aria-hidden="true">
+      <div class="playlist-manager-backdrop" data-close-visibility-modal="true"></div>
+      <div class="playlist-manager-panel visibility-confirm-panel" role="dialog" aria-modal="true" aria-labelledby="playlistVisibilityTitle">
+        <div class="playlist-manager-header">
+          <div>
+            <span class="mini-label">Visibility</span>
+            <h3 id="playlistVisibilityTitle">公開状態を変更</h3>
+          </div>
+          <button id="closePlaylistVisibilityBtn" class="close-btn" type="button" aria-label="閉じる">×</button>
+        </div>
+        <div class="visibility-confirm-body">
+          <div class="visibility-confirm-icon" aria-hidden="true">🌐</div>
+          <div class="visibility-confirm-copy">
+            <strong id="playlistVisibilityName"></strong>
+            <p id="playlistVisibilityMessage" class="visibility-confirm-message"></p>
+          </div>
+        </div>
+        <div class="profile-actions">
+          <button id="cancelPlaylistVisibilityBtn" class="ghost-btn" type="button">キャンセル</button>
+          <button id="confirmPlaylistVisibilityBtn" class="primary-btn" type="button">変更する</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="trackEditModal" class="playlist-manager-modal hidden" aria-hidden="true">
+      <div class="playlist-manager-backdrop" data-close-track-edit="true"></div>
+      <div class="playlist-manager-panel" role="dialog" aria-modal="true" aria-labelledby="trackEditTitle">
+        <div class="playlist-manager-header">
+          <div>
+            <span class="mini-label">Edit music</span>
+            <h3 id="trackEditTitle">音楽を編集</h3>
+          </div>
+          <button id="closeTrackEditBtn" class="close-btn" type="button" aria-label="閉じる">×</button>
+        </div>
+        <div class="upload-metadata track-edit-form">
+          <label for="trackEditTitleInput">
+            <span>タイトル</span>
+            <input id="trackEditTitleInput" type="text" maxlength="120" autocomplete="off" />
+          </label>
+
+          <label for="trackEditDescriptionInput">
+            <span>説明</span>
+            <textarea id="trackEditDescriptionInput" rows="5" maxlength="500" placeholder="曲の説明を入力"></textarea>
+          </label>
+
+          <div class="playlist-picker">
+            <label for="trackEditPlaylistSearch">追加プレイリスト</label>
+            <div class="playlist-picker-search-row">
+              <input id="trackEditPlaylistSearch" type="search" placeholder="プレイリストを検索" autocomplete="off" />
+              <button id="trackEditNewPlaylistBtn" class="playlist-add-btn" type="button"><span aria-hidden="true">＋</span> 新規追加</button>
+            </div>
+            <div class="playlist-picker-select-row">
+              <div id="trackEditPlaylistSelect" class="playlist-checkbox-list" role="group" aria-label="対象プレイリスト"></div>
+              <select id="trackEditPlaylistSort" aria-label="プレイリストの並び順">
+                <option value="created-desc" selected>新しい順</option>
+                <option value="name">名前順</option>
+                <option value="created-asc">古い順</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="playlist-rename-actions">
+            <button id="cancelTrackEditBtn" class="ghost-btn" type="button">キャンセル</button>
+            <button id="saveTrackEditBtn" class="primary-btn" type="button">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="favoriteClearModal" class="playlist-manager-modal hidden" aria-hidden="true">
+      <div class="playlist-manager-backdrop" data-close-favorite-clear="true"></div>
+      <div class="playlist-manager-panel playlist-delete-panel" role="dialog" aria-modal="true" aria-labelledby="favoriteClearTitle">
+        <div class="playlist-manager-header">
+          <div>
+            <span class="mini-label">Clear favorites</span>
+            <h3 id="favoriteClearTitle">お気に入り曲をすべて解除</h3>
+          </div>
+          <button id="closeFavoriteClearBtn" class="close-btn" type="button" aria-label="閉じる">×</button>
+        </div>
+        <div class="playlist-delete-form">
+          <span class="playlist-delete-icon" aria-hidden="true">★</span>
+          <strong id="favoriteClearMessage">お気に入り曲をすべて解除しますか？</strong>
+          <div class="playlist-rename-actions">
+            <button id="cancelFavoriteClearBtn" class="ghost-btn" type="button">キャンセル</button>
+            <button id="confirmFavoriteClearBtn" class="danger-btn" type="button">解除する</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
+
+    <script src="config.js" defer></script>
     <script src="app.js" defer></script>
   </body>
 </html>

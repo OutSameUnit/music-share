@@ -1,0 +1,140 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^cd 'd:\\\\Projects\\\\playlist\\\\src'; node --check app\\.js$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^node --check app\\.js$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; node --check \\.\\\\app\\.js$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd /d \"d:\\\\Projects\\\\playlist\\\\src\"; node --check app\\.js$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd /d/Projects/playlist/src; node --check app\\.js$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; node --check app\\.js$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^node -e \"\\$func = function\\(fileUrl\\)\\{ if\\(!fileUrl\\|\\|typeof fileUrl!=='string'\\) return null; const normalized=fileUrl\\.trim\\(\\); if\\(!normalized\\) return null; if\\(normalized\\.includes\\('/image/upload/'\\) && \\(normalized\\.includes\\('/c_fill,'\\) \\|\\| /\\\\\\.\\(jpg\\|jpeg\\|png\\|webp\\|gif\\|avif\\|svg\\)\\(\\\\\\?\\|\\$\\)/i\\.test\\(normalized\\)\\)\\) return normalized; if\\(normalized\\.includes\\('/video/upload/'\\)\\) \\{ if\\(/\\\\\\.\\(jpg\\|jpeg\\|png\\|webp\\|gif\\|avif\\|svg\\)\\(\\\\\\?\\|\\$\\)/i\\.test\\(normalized\\)\\) return normalized; const uploadIndex = normalized\\.indexOf\\('/upload/'\\); if\\(uploadIndex < 0\\) return normalized; const assetPath = normalized\\.slice\\(uploadIndex \\+ '/upload/'\\.length\\)\\.replace\\(/\\\\\\?\\.\\*\\$/, ''\\); if\\(!assetPath\\) return normalized; const cleanedAssetPath = assetPath\\.replace\\(/\\\\\\.\\(mp4\\|mov\\|webm\\|m4v\\|avi\\|mkv\\)\\(\\\\\\?\\.\\*\\)\\?\\$/i, ''\\); const prefix = normalized\\.slice\\(0, uploadIndex \\+ '/upload/'\\.length\\); return `\\$\\{prefix\\}so_0,w_320,h_180,c_fill/\\$\\{cleanedAssetPath\\}\\.jpg`; \\} if\\(normalized\\.includes\\('/upload/'\\)\\) \\{ const uploadIndex = normalized\\.indexOf\\('/upload/'\\); if\\(uploadIndex >= 0\\) return `\\$\\{normalized\\.slice\\(0, uploadIndex \\+ '/upload/'\\.length\\)\\}c_fill,w_320,h_180/\\$\\{normalized\\.slice\\(uploadIndex \\+ '/upload/'\\.length\\)\\}`; \\} return normalized; \\}; const url='https://res\\.cloudinary\\.com/demo/video/upload/v1712345/sample\\.mp4'; console\\.log\\(\\$func\\(url\\)\\);\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^node --check \"D:/Projects/playlist/src/app\\.js\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cmd /c \"cd /d D:\\\\Projects\\\\playlist\\\\src && node --check app\\.js\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; python \\.\\\\fix_app_dedupe\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^node --check \"D:\\\\Projects\\\\playlist\\\\src\\\\service-worker\\.js\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd /d/Projects/playlist/src ; python -m http\\.server 8000$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location \"d:\\\\Projects\\\\playlist\"; node --check \"src/app\\.js\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^node --check \"src/app\\.js\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location \"d:\\\\Projects\\\\playlist\\\\src\"; python -m http\\.server 8000$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^node -p \"require\\.resolve\\('playwright'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location \"d:\\\\Projects\\\\playlist\"; node --check \"src/app\\.js\"; Select-String -Path \"src/supabase-schema\\.sql\" -Pattern \"grant select, insert, update, delete on table public\\.track_favorites to authenticated;\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^node -e 'const url=\"https://jgqjihttevmeeibjqtmj\\.supabase\\.co/rest/v1/playlists\"; const anon=\"sb_publishable_QHNLQVBl198yznlLrv0lWw_utLPB22k\"; const cutoff=new Date\\(Date\\.now\\(\\)-30\\*24\\*60\\*60\\*1000\\)\\.toISOString\\(\\); const qs=new URLSearchParams\\(\\{ select:\"id,name,is_public,created_at,owner_id\", is_public:\"eq\\.true\", created_at:\"gte\\.\"\\+cutoff \\}\\); fetch\\(url\\+\"\\?\"\\+qs, \\{ headers:\\{ apikey:anon, Authorization:\"Bearer \"\\+anon, Accept:\"application/json\", \"Content-Type\":\"application/json\" \\} \\}\\)\\.then\\(async res => \\{ const text=await res\\.text\\(\\); console\\.log\\(\"status\", res\\.status\\); console\\.log\\(text\\.slice\\(0,2000\\)\\); \\}\\)\\.catch\\(err => \\{ console\\.error\\(err\\); process\\.exit\\(1\\); \\}\\);'$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python -c 'import urllib\\.request, urllib\\.parse, json; url=\"https://jgqjihttevmeeibjqtmj\\.supabase\\.co/rest/v1/playlists\"; key=\"sb_publishable_QHNLQVBl198yznlLrv0lWw_utLPB22k\"; cutoff=\"2026-08-14T00:00:00\\.000Z\"; params=urllib\\.parse\\.urlencode\\(\\{\"select\":\"id,name,description,icon,is_public,created_at,owner_id\",\"is_public\":\"eq\\.true\",\"created_at\":\"gte\\.\"\\+cutoff\\}\\); req=urllib\\.request\\.Request\\(url\\+\"\\?\"\\+params, headers=\\{\"apikey\": key, \"Authorization\": \"Bearer \"\\+key, \"Accept\": \"application/json\", \"Content-Type\": \"application/json\"\\}, method=\"GET\"\\); try: with urllib\\.request\\.urlopen\\(req, timeout=30\\) as r: body=r\\.read\\(\\)\\.decode\\(\\); print\\(\"STATUS\", r\\.status\\); print\\(body\\[:4000\\]\\); except Exception as e: import traceback; traceback\\.print_exc\\(\\);'$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python -c \"import urllib\\.request, urllib\\.parse; url='https://jgqjihttevmeeibjqtmj\\.supabase\\.co/rest/v1/playlists'; key='sb_publishable_QHNLQVBl198yznlLrv0lWw_utLPB22k'; cutoff='2026-08-14T00:00:00\\.000Z'; params=urllib\\.parse\\.urlencode\\(\\{'select':'id,name,description,icon,is_public,created_at,owner_id','is_public':'eq\\.true','created_at':'gte\\.'\\+cutoff\\}\\); req=urllib\\.request\\.Request\\(url\\+'\\?'\\+params, headers=\\{'apikey':key,'Authorization':'Bearer '\\+key,'Accept':'application/json','Content-Type':'application/json'\\}\\); with urllib\\.request\\.urlopen\\(req, timeout=30\\) as r: body=r\\.read\\(\\)\\.decode\\(\\); print\\('STATUS', r\\.status\\); print\\(body\\[:4000\\]\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd /d \"D:\\\\Projects\\\\playlist\" ; node --check \"src/app\\.js\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist'; Get-Location; node --check \\.\\\\src\\\\app\\.js$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist'; node --check \\.\\\\src\\\\app\\.js$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist'; node -e \"const fs=require\\('fs'\\); const text=fs\\.readFileSync\\('src/config\\.js','utf8'\\); const m=text\\.match\\(/url:\\\\s\\*'\\(\\[\\^'\\]\\+\\)'/\\); const n=text\\.match\\(/anonKey:\\\\s\\*'\\(\\[\\^'\\]\\+\\)'/\\); const url=m&&m\\[1\\]; const anon=n&&n\\[1\\]; if\\(!url\\|\\|!anon\\)\\{console\\.error\\('missing config'\\); process\\.exit\\(1\\);\\} fetch\\(`\\$\\{url\\}/rest/v1/favorite_playlists\\?select=user_id,playlist_id,created_at&limit=20`, \\{headers:\\{apikey:anon, Authorization:`Bearer \\$\\{anon\\}`\\}\\}\\)\\.then\\(async r=>\\{const txt=await r\\.text\\(\\); console\\.log\\('HTTP',r\\.status\\); console\\.log\\(txt\\.slice\\(0,2000\\)\\);\\}\\)\\.catch\\(err=>\\{console\\.error\\(err\\); process\\.exit\\(1\\);\\}\\);\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist'; node -e \"const fs=require\\('fs'\\); const text=fs\\.readFileSync\\('src/config\\.js','utf8'\\); const url=text\\.match\\(/url:\\\\s\\*'\\(\\[\\^'\\]\\+\\)'/\\)\\[1\\]; const anon=text\\.match\\(/anonKey:\\\\s\\*'\\(\\[\\^'\\]\\+\\)'/\\)\\[1\\]; const endpoint = url \\+ '/rest/v1/favorite_playlists\\?select=user_id,playlist_id,created_at&order=created_at\\.desc&limit=20'; fetch\\(endpoint,\\{headers:\\{apikey:anon,Authorization:'Bearer ' \\+ anon,Accept:'application/json'\\}\\}\\)\\.then\\(async res=>\\{console\\.log\\('HTTP',res\\.status\\); const body=await res\\.text\\(\\); console\\.log\\(body\\.slice\\(0,1500\\)\\);\\}\\)\\.catch\\(err=>\\{console\\.error\\(err\\); process\\.exit\\(1\\);\\}\\);\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; python -m http\\.server 8000$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd /d/Projects/playlist/src ; node --check app\\.js$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist'; git diff --check; node --check \\.\\\\src\\\\app\\.js$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; git diff --check; node --check \\.\\\\app\\.js$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; node --check \\.\\\\app\\.js; git diff --check$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Get-Command ffprobe -ErrorAction SilentlyContinue \\| Select-Object -ExpandProperty Source$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist'; node --check \\.\\\\src\\\\app\\.js; git diff --check$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; git remote -v$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; git add -A; git commit -m \"Refine mobile queue and music views\"; git push origin main$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

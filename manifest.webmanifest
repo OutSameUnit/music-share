@@ -1,0 +1,17 @@
+{
+  "name": "Music Share",
+  "short_name": "MusicShare",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#091219",
+  "theme_color": "#0f1a24",
+  "description": "家族向けの音楽共有アプリ",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
