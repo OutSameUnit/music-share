@@ -2001,6 +2001,11 @@ input {
     flex-direction: column;
   }
 
+  .playlist-picker-search-row input {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+
   .playlist-picker-select-row > select {
     flex-basis: auto;
   }
