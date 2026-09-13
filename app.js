@@ -2482,6 +2482,11 @@ async function togglePlayerExpanded() {
     return;
   }
 
+  if (window.matchMedia?.('(max-width: 900px)').matches) {
+    toggleFallbackPlayerExpanded();
+    return;
+  }
+
   try {
     if (document.fullscreenElement === viewport) {
       await document.exitFullscreen();
