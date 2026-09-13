@@ -1,12 +1,11 @@
-# Family video share app
+# Music Share
 
-家族で音楽や動画を共有するための静的Webアプリです。
+家族や友人と音楽・動画・プレイリストを共有する静的フロントエンドアプリです。Supabase Auth / Database と Cloudinary を利用し、未設定時はローカル保存を使う local-first 構成で動作します。
 
 ## 使い方
 
-1. 動画ファイルを `assets/videos/` に配置します。
-2. `app.js` の `videos` 配列にファイル名を追加または変更します。
-3. ローカルで確認する場合は次のコマンドを実行します。
+1. `config.js` に Supabase と Cloudinary の公開設定を入力します。未設定の場合は匿名・ローカル保存モードで起動します。
+2. ローカルで確認する場合は次のコマンドを実行します。
 
 ```bash
 cd src
@@ -15,16 +14,30 @@ python -m http.server 8000
 
 ブラウザで `http://localhost:8000` を開きます。
 
+Windowsでは `run-local-server.bat` から起動することもできます。
+
+## 主な機能
+
+- Supabase Auth による Google / GitHub ログイン
+- 音楽・動画のアップロードと Cloudinary 配信
+- プレイリストの作成、編集、公開、共有
+- 公開プレイリストと曲のお気に入り管理
+- 再生キュー、シャッフル、リピート、再生履歴
+- モバイル用の下部キュードロワー
+- モバイルでのプレイリスト折りたたみとアップロード済み音楽一覧
+
 ## GitHub Pages への公開
 
-このアプリはバックエンドなしの静的サイトで構成されているため、GitHub Pages へそのまま公開しやすいです。
+フロントエンドは静的サイトとして GitHub Pages に公開できます。認証・データ保存・メディア配信には Supabase と Cloudinary の設定が必要です。
 
-- `index.html`、`styles.css`、`app.js`、`assets/` を GitHub のリポジトリにそのまま配置
+- `index.html`、`styles.css`、`app.js`、`config.js` を GitHub のリポジトリに配置
 - GitHub の Settings > Pages から `main` ブランチまたは `docs` フォルダを公開先に設定
 - 公開URLは `https://<ユーザー名>.github.io/<リポジトリ名>/` の形式になります
 
-## メモ
+## 設定と注意
 
-- 画像やサムネイルがない場合でも、タイトルの頭文字を使って一覧表示できます。
-- ファイル名にスペースが含まれる場合は、`app.js` で URL エンコードしたパスを使います。
-- GitHub Pages はサーバーサイド処理が使えないため、動画管理は静的なファイル一覧で実装しています。
+- `config.js` には Supabase の anon key や Cloudinary の unsigned upload preset など、フロントエンドで公開可能な値だけを設定します。
+- Supabase の service-role key やその他の秘密情報は、ブラウザへ配信するファイルに書かないでください。
+- Supabaseを利用する場合は `supabase-schema.sql` を適用し、RLSポリシーを有効にしてください。
+- サムネイルがない曲は、音符アイコンのプレースホルダーで表示されます。
+- 認証・クラウド設定がない環境では、利用可能な機能が匿名・ローカル保存モードに制限されます。
