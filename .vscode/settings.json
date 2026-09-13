@@ -135,6 +135,18 @@
         "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; git add -A; git commit -m \"Refine mobile queue and music views\"; git push origin main$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; git fetch origin; git log --oneline --decorate --graph --all -8; git status --short --branch$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; git stash push -m \"preserve local vscode settings\"; git rebase origin/main; git stash pop; git push origin main$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^Set-Location 'D:\\\\Projects\\\\playlist\\\\src'; git add README\\.md; git add -f docs/project-context\\.md docs/implementation-roadmap\\.md; git commit -m \"Document current app features\"; git push origin main; git status --short --branch$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }

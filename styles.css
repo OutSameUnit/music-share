@@ -2915,6 +2915,25 @@ input {
   background-size: contain;
 }
 
+.player-viewport.is-expanded {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  min-height: 0;
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: 0;
+  background-size: contain;
+}
+
+.player-viewport.is-expanded.controls-visible .close-player-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .player-controls {
   display: flex;
   flex-wrap: wrap;
@@ -3955,10 +3974,69 @@ input {
 
   .player-track-main {
     align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .player-track-copy h3 {
+    font-size: 1.08rem;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
   }
 
   .player-meta-line {
     flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .player-wrap {
+    margin-bottom: 20px;
+  }
+
+  .player-viewport {
+    aspect-ratio: 4 / 3;
+    min-height: 240px;
+  }
+
+  .player-viewport-controls {
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    gap: 12px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 14px;
+    background: rgba(5, 12, 21, 0.72);
+    backdrop-filter: blur(8px);
+  }
+
+  .player-controls {
+    gap: 10px;
+  }
+
+  .player-bottom-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .player-bottom-row .mode-row {
+    min-width: 0;
+    flex: 1 1 calc(100% - 52px);
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .player-bottom-row .expand-player-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .compact-btn {
+    min-width: 52px;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
   }
 
   .panel,

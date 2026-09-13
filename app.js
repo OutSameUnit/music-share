@@ -2465,6 +2465,17 @@ function updateCustomPlayerViewport(track) {
   setText(elements.playerViewportArtist, hasTrack ? `${viewportDate || '-'} ${activeTrack.artistIcon || '🎧'} ${activeTrack.artist || '匿名アカウント'}` : '再生中の情報がここに表示されます');
 }
 
+function toggleFallbackPlayerExpanded() {
+  const viewport = elements.playerViewport;
+  if (!viewport) {
+    return;
+  }
+
+  const expanded = viewport.classList.toggle('is-expanded');
+  elements.expandPlayerBtn?.setAttribute('aria-label', expanded ? '再生画面を縮小' : '再生画面を拡大');
+  showPlayerControls();
+}
+
 async function togglePlayerExpanded() {
   const viewport = elements.playerViewport;
   if (!viewport) {
@@ -2476,9 +2487,12 @@ async function togglePlayerExpanded() {
       await document.exitFullscreen();
     } else if (typeof viewport.requestFullscreen === 'function') {
       await viewport.requestFullscreen();
+    } else {
+      toggleFallbackPlayerExpanded();
     }
   } catch (error) {
     console.warn('Player fullscreen is unavailable:', error);
+    toggleFallbackPlayerExpanded();
   }
 }
 
@@ -2507,6 +2521,11 @@ function hidePlayerControls() {
 }
 
 function closePlayerControls() {
+  if (elements.playerViewport?.classList.contains('is-expanded')) {
+    elements.playerViewport.classList.remove('is-expanded');
+    elements.expandPlayerBtn?.setAttribute('aria-label', '再生画面を拡大');
+  }
+
   if (document.fullscreenElement === elements.playerViewport) {
     document.exitFullscreen().catch(() => {});
     return;
